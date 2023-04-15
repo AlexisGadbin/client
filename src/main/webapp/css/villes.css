@@ -1,0 +1,31 @@
+div.grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 10px;
+    grid-auto-rows: minmax(100px, auto);
+}
+
+div.grid div {
+    background: #eee;
+    border: 1px solid #ccc;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+form input {
+    margin: 10px 0;
+}
+
+.infosVille h2{
+    align-self: center;
+}
+
+.linkVille {
+    margin: 10px 0;
+}
