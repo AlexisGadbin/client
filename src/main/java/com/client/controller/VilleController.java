@@ -59,11 +59,14 @@ public class VilleController {
 		ModelAndView mv = new ModelAndView();
 		List<Ville> villes = new ArrayList<Ville>();
 
+		int page = request.getParameter("page") != null ? Integer.parseInt(request.getParameter("page")) : 1;
+
 		String uri = "http://localhost:8181/ville";
 		RestTemplate restTemplate = new RestTemplate();
 		String response = restTemplate.getForObject(uri, String.class);
 		JSONArray jsonArray = new JSONArray(response);
-		for (int i = 0; i < jsonArray.length(); i++) {
+		int max = page > 67 ? jsonArray.length() : page*50;
+		for (int i = (page-1)*50; i < max; i++) {
 			JSONObject jsonObject = jsonArray.getJSONObject(i);
 			Ville v = new Ville();
 			v.setLibelleAcheminement(jsonObject.getString("libelleAcheminement"));
@@ -83,7 +86,7 @@ public class VilleController {
 				break;
 			}
 		}
-
+		mv.addObject("page", page);
 		mv.addObject("villes", villes);
 		mv.setViewName("villes");
 
@@ -116,11 +119,9 @@ public class VilleController {
         connection.setRequestProperty("Content-Type", "application/json");
         connection.setRequestProperty("Accept", "application/json");
         OutputStreamWriter osw = new OutputStreamWriter(connection.getOutputStream());
-		System.out.println(req.toString());
         osw.write(req.toString());
         osw.flush();
         osw.close();
-        System.err.println(connection.getResponseCode());
 
 		return this.villes(request);
 	}
