@@ -26,34 +26,6 @@ import com.client.model.Ville;
 @Controller
 public class VilleController {
 
-	@RequestMapping("/")
-	public ModelAndView home() {
-		ModelAndView mv = new ModelAndView();
-		List<Ville> villes = new ArrayList<Ville>();
-
-		String uri = "http://localhost:8181/ville";
-		RestTemplate restTemplate = new RestTemplate();
-		String response = restTemplate.getForObject(uri, String.class);
-		JSONArray jsonArray = new JSONArray(response);
-		for (int i = 0; i < jsonArray.length(); i++) {
-			JSONObject jsonObject = jsonArray.getJSONObject(i);
-			Ville v = new Ville();
-			v.setLibelleAcheminement(jsonObject.getString("libelleAcheminement"));
-			v.setLigne(jsonObject.getString("ligne"));
-			v.setLatitude(jsonObject.getString("latitude"));
-			v.setLongitude(jsonObject.getString("longitude"));
-			v.setCodePostal(jsonObject.getString("codePostal"));
-			v.setNomCommune(jsonObject.getString("nomCommune"));
-			v.setCode_commune_INSEE(jsonObject.getString("code_commune_INSEE"));
-			villes.add(v);
-		}
-
-		mv.addObject("villes", villes);
-		mv.setViewName("home");
-
-		return mv;
-	}
-
 	@GetMapping("/villes")
 	public ModelAndView villes(HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();

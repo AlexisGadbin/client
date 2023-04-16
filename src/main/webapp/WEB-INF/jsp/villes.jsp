@@ -20,7 +20,6 @@
             <div class="grid">
                 <div class="listeVilles">
                     <h2>Liste des villes</h2>
-                    <h3>Selectionner une ville pour voir les informations</h3>
                     <c:forEach items="${villes}" var="v">
                         <a class="linkVille" href="/villes?ville=${v.getNomCommune()}&page=${page}"><c:out value="${v.getNomCommune()}" /></a>
                     </c:forEach>
@@ -52,6 +51,9 @@
                     </div>
                 </div>
                 <div class="infosVille">
+                    <c:if test="${ville == null}">
+                        <h3>Selectionner une ville pour voir les informations</h3>
+                    </c:if>
                     <c:if test="${ville != null}">
                         <h2><c:out value="${ville.getNomCommune()}"/></h2>
                     
