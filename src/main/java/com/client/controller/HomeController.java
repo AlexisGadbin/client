@@ -36,7 +36,7 @@ public class HomeController {
 			v.setLongitude(jsonObject.getString("longitude"));
 			v.setCodePostal(jsonObject.getString("codePostal"));
 			v.setNomCommune(jsonObject.getString("nomCommune"));
-			v.setCode_commune_INSEE(jsonObject.getString("code_commune_INSEE"));
+			v.setCodeCommuneInsee(jsonObject.getString("codeCommuneInsee"));
 			villes.add(v);
 		}
 
@@ -65,7 +65,7 @@ public class HomeController {
         v1.setLongitude(jsonObject1.getString("longitude"));
         v1.setCodePostal(jsonObject1.getString("codePostal"));
         v1.setNomCommune(jsonObject1.getString("nomCommune"));
-        v1.setCode_commune_INSEE(jsonObject1.getString("code_commune_INSEE"));
+        v1.setCodeCommuneInsee(jsonObject1.getString("codeCommuneInsee"));
 
         String uri2 = "http://localhost:8181/ville/"+ville2;
 
@@ -78,7 +78,7 @@ public class HomeController {
         v2.setLongitude(jsonObject2.getString("longitude"));
         v2.setCodePostal(jsonObject2.getString("codePostal"));
         v2.setNomCommune(jsonObject2.getString("nomCommune"));
-        v2.setCode_commune_INSEE(jsonObject2.getString("code_commune_INSEE"));
+        v2.setCodeCommuneInsee(jsonObject2.getString("codeCommuneInsee"));
 
         double distance = v1.distance(v2);
 

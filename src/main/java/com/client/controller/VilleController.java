@@ -3,12 +3,9 @@ package com.client.controller;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -17,7 +14,6 @@ import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -29,7 +25,7 @@ public class VilleController {
 	@GetMapping("/villes")
 	public ModelAndView villes(HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
-		List<Ville> villes = new ArrayList<Ville>();
+		List<Ville> villes = new ArrayList<>();
 
 		int page = request.getParameter("page") != null ? Integer.parseInt(request.getParameter("page")) : 1;
 
@@ -47,7 +43,7 @@ public class VilleController {
 			v.setLongitude(jsonObject.getString("longitude"));
 			v.setCodePostal(jsonObject.getString("codePostal"));
 			v.setNomCommune(jsonObject.getString("nomCommune"));
-			v.setCode_commune_INSEE(jsonObject.getString("code_commune_INSEE"));
+			v.setCodeCommuneInsee(jsonObject.getString("codeCommuneInsee"));
 			villes.add(v);
 		}
 
@@ -76,13 +72,15 @@ public class VilleController {
 		String longitude = request.getParameter("longitude");
 
 		JSONObject req = new JSONObject();
-		req.put("code_commune_INSEE", codeCommune);
+		req.put("codeCommuneInsee", codeCommune);
 		req.put("nomCommune", nomCommune);
 		req.put("codePostal", codePostal);
 		req.put("libelleAcheminement", libelle);
 		req.put("ligne", ligne);
 		req.put("latitude", latitude);
 		req.put("longitude", longitude);
+
+		System.out.println(req);
 
         URL url = new URL("http://localhost:8181/ville");
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();

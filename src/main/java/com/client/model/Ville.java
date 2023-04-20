@@ -2,13 +2,12 @@ package com.client.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.ToString;
 
 @Data
 @AllArgsConstructor
 public class Ville {
 	
-	private String Code_commune_INSEE;
+	private String codeCommuneInsee;
 	
 	private String nomCommune;
 	
@@ -23,6 +22,7 @@ public class Ville {
 	private String longitude;
 	
 	public Ville() {
+		// Do nothing but usefull for SpringBoot
 	}
 	
 

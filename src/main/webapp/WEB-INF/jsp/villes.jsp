@@ -60,7 +60,7 @@
                         <form method="post" action="/villes?ville=${ville.getNomCommune()}&page=${page}" name="modifierVille">
                             
                             <label for="codeCommune">Code commune</label>
-                            <input name="codeCommune" value="${ville.getCode_commune_INSEE()}" readonly/>
+                            <input name="codeCommune" value="${ville.getCodeCommuneInsee()}" readonly/>
 
                             <label for="codePostal">Code postal</label>
                             <input name="codePostal" value="${ville.getCodePostal()}"/>
