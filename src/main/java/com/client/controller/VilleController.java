@@ -1,9 +1,6 @@
 package com.client.controller;
 
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +8,12 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -46,14 +49,41 @@ public class VilleController {
 			v.setCodeCommuneInsee(jsonObject.getString("codeCommuneInsee"));
 			villes.add(v);
 		}
-
+		Ville ville = null;
 		String requestedVille = request.getParameter("ville");
 		for (Ville v : villes) {
 			if (v.getNomCommune().equals(requestedVille)) {
-				mv.addObject("ville", v);
+				ville = v;
 				break;
 			}
 		}
+
+		if(ville != null) {
+			mv.addObject("ville", ville);
+
+			String url = "https://api.openweathermap.org/data/2.5/weather?lat="+ville.getLatitude()+"&lon="+ville.getLongitude()+"&lang=fr&appid=ed9c9f1ee18ebb8c5346720a6e25abbd";
+
+			String apiKey = "ed9c9f1ee18ebb8c5346720a6e25abbd";
+
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_JSON);
+
+			HttpEntity<String> requete = new HttpEntity<>(headers);
+			
+			ResponseEntity<String> reponse = null;
+			try {
+				reponse = restTemplate.exchange(url, HttpMethod.GET, requete, String.class);
+				JSONObject jo = new JSONObject(reponse.getBody());
+				mv.addObject("meteo", true);
+				DecimalFormat df = new DecimalFormat("#.##");
+				mv.addObject("temperature", df.format(jo.getJSONObject("main").getDouble("temp")-273.15));
+				mv.addObject("description", jo.getJSONArray("weather").getJSONObject(0).getString("description"));
+				mv.addObject("icon", jo.getJSONArray("weather").getJSONObject(0).getString("icon"));
+			} catch (Exception e) {
+				throw new Error("Erreur lors de la requête");
+			}
+		}
+
 		mv.addObject("page", page);
 		mv.addObject("villes", villes);
 		mv.setViewName("villes");
@@ -62,7 +92,7 @@ public class VilleController {
 	}
 
 	@PostMapping("/villes")
-	public ModelAndView villepost(HttpServletRequest request) throws IOException {
+	public ModelAndView villepost(HttpServletRequest request) {
 		String codeCommune = request.getParameter("codeCommune");
 		String nomCommune = request.getParameter("nomCommune");
 		String codePostal = request.getParameter("codePostal");
@@ -80,18 +110,18 @@ public class VilleController {
 		req.put("latitude", latitude);
 		req.put("longitude", longitude);
 
-		System.out.println(req);
+		RestTemplate restTemplate = new RestTemplate();
 
-        URL url = new URL("http://localhost:8181/ville");
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.setRequestMethod("PUT");
-        connection.setDoOutput(true);
-        connection.setRequestProperty("Content-Type", "application/json");
-        connection.setRequestProperty("Accept", "application/json");
-        OutputStreamWriter osw = new OutputStreamWriter(connection.getOutputStream());
-        osw.write(req.toString());
-        osw.flush();
-        osw.close();
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		HttpEntity<String> requete = new HttpEntity<>(req.toString(0), headers);
+
+		ResponseEntity<String> reponse = restTemplate.exchange("http://localhost:8181/ville", HttpMethod.PUT, requete, String.class);
+
+		if (reponse.getStatusCode() != HttpStatus.OK) {
+			throw new Error("Erreur lors de la requête");
+		}
 
 		return this.villes(request);
 	}

@@ -48,3 +48,16 @@ div.pagination {
 .disabledHref {
     pointer-events: none;
 }
+
+img{
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    vertical-align: middle;
+}
+
+.descriptionP {
+    font-size: 1.2em;
+    vertical-align: middle;
+    display: inline-block;
+}

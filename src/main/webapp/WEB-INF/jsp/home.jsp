@@ -17,8 +17,6 @@
         <%@ include file="navBar.jsp" %> 
         
         <main>
-            <h1>Home page</h1>
-
             <form action="/" method="post">
                 <select name="ville1" id="ville1">
                     <c:forEach items="${villes}" var="v">

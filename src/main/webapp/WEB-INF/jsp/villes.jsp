@@ -1,5 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page pageEncoding="UTF-8" %>
 
+<!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="utf-8">
@@ -54,7 +56,21 @@
                     <c:if test="${ville == null}">
                         <h3>Selectionner une ville pour voir les informations</h3>
                     </c:if>
+
                     <c:if test="${ville != null}">
+                        <c:choose>
+                            <c:when test="${meteo}">
+                                <h2>Météo</h2>
+                                <p>Température : <c:out value="${temperature}"/>°</p>
+                                <div class="description" style="all:unset">
+                                    <img src="http://openweathermap.org/img/w/${icon}.png" alt="icone méteo">
+                                    <p class="descriptionP"><c:out value="${description}" /></p>
+                                </div>
+                            </c:when>
+                            <c:otherwise>
+                                <p>Erreur dans la récupération des informations météo</p>
+                            </c:otherwise>
+                        </c:choose>
                         <h2><c:out value="${ville.getNomCommune()}"/></h2>
                     
                         <form method="post" action="/villes?ville=${ville.getNomCommune()}&page=${page}" name="modifierVille">
